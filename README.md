@@ -3,5 +3,5 @@ The back-end for NoShed. It is a simple Node.js server using Express. It queries
 
 ## Usage
 From the src folder:
-	npm install
-	npm start
+* `npm install`
+* `npm start`
