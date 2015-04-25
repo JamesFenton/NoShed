@@ -1,0 +1,15 @@
+{
+  "name": "NoShed-Server",
+  "version": "0.0.1",
+  "description": "The back-end for NoShed",
+  "scripts": {
+	"start": "node server",
+	"test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.12.3"
+  },
+  "devDependencies": {},
+  "author": "James Fenton",
+  "license": "GPLv2"
+}
