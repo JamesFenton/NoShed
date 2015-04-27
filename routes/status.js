@@ -52,14 +52,14 @@ router.get('/', function (req, res) {
 				});
 			}
 			else {
-				var message = 'Could not connect to eskom.co.za: ' + getRes.statusCode + '. ' + getRes.statusMessage;
+				var message = 'Could not connect to eskom.co.za: ' + getRes.statusCode;
 				res.status(500).send({'error': message});
 				var clientAddress = req.header('x-forwarded-for') || req.connection.remoteAddress || 'unknown';
 				log(clientAddress, 'error', null, message);
 			}
 		// handle errors
 		}).on('error', function(e) {
-			var message = 'Could not connect to eskom.co.za: ' + e.message;
+			var message = 'Could not connect to eskom.co.za: ' + e.code;
 			res.status(500).send({'error': message});
 			var clientAddress = req.header('x-forwarded-for') || req.connection.remoteAddress || 'unknown';
 			log(clientAddress, 'error', null, message);
