@@ -7,10 +7,10 @@ var log = require('../helpers/logging');
 router.get('/', function (req, res) { 
 	
 		// headers
-		res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8100'); // Website you wish to allow to connect
-		res.setHeader('Access-Control-Allow-Methods', 'GET'); // Request methods you wish to allow
-		res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // Request headers you wish to allow
-		res.setHeader('Access-Control-Allow-Credentials', true); // Set to true if you need the website to include cookies in the requests sent
+		res.setHeader('Access-Control-Allow-Origin', '*'); // Website you wish to allow to connect
+		//res.setHeader('Access-Control-Allow-Methods', 'GET'); // Request methods you wish to allow
+		//res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // Request headers you wish to allow
+		//res.setHeader('Access-Control-Allow-Credentials', true); // Set to true if you need the website to include cookies in the requests sent
 		
 		res.setHeader('Content-Type', 'application/json');
 		
