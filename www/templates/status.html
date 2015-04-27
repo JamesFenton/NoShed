@@ -1,7 +1,6 @@
 <ion-view view-title="Status" ng-init="init()">
   <ion-content>
-    <ion-item class="text-center">
-      Stage {{currentStatus}} in Area {{currentArea}}
+    <ion-item class="text-center" ng-bind="message" ng-style="statusStyle">
     </ion-item>
     <ion-item class="button button-block button-stable" ng-click="getStatus()">
       Get Status

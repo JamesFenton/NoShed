@@ -29,12 +29,12 @@ angular.module('noshed', ['ionic', 'starter.controllers'])
     templateUrl: "templates/menu.html"
   })
 
-  .state('app.search', {
-    url: "/search",
+  .state('app.area', {
+    url: "/areas",
     views: {
       'menuContent': {
-        templateUrl: "templates/search.html",
-        controller: 'SearchCtrl'
+        templateUrl: "templates/areas.html",
+        controller: 'AreaCtrl'
       }
     }
   })

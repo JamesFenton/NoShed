@@ -19,20 +19,21 @@ app.service('AreaService', function($http, $rootScope) {
 
     this.getStatus = function() {
 
-				// expect { 'data': 1 }
-        $http.get('http://noshedserver-dev.azurewebsites.net/status') 
+		// http://noshedserver-dev.azurewebsites.net/status
+		// expect { 'status': 1 }
+        $http.get('http://localhost:3000/status') 
             .success(function(data, status, headers, config) {
                 console.log("Got status from server: " + JSON.stringify(data));
                 this.currentStatus = data.status;
-                $rootScope.$broadcast(gotStatusEvent, data.status);
+                $rootScope.$broadcast(gotStatusEvent, {'success': true, 'status': data.status});
             }).
             error(function(data, status, headers, config) {
-                console.log("Failure: " + status + ". Data: " + data);
+                $rootScope.$broadcast(gotStatusEvent, {'success': false, 'message': data.error});
             });
     };
 });
 
-app.controller('SearchCtrl', function($scope, AreaService){
+app.controller('AreaCtrl', function($scope, AreaService){
     
     $scope.allAreas = AreaService.allAreas;
 
@@ -45,16 +46,18 @@ app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaSer
     
     $scope.currentArea = AreaService.currentArea;
     $scope.currentStatus = AreaService.currentStatus;
+	$scope.message = "";
+	$scope.statusStyle = {};
 		
-		$scope.init = function() {
-			var isAreaSet = $scope.currentArea !== null;
-			if (isAreaSet){
-				console.log("Current area: " + $scope.currentArea);}
-			else {
-				console.log("Current area not set");
-			}
-			$scope.getStatus();
-		};
+	$scope.init = function() {
+		var isAreaSet = $scope.currentArea !== null;
+		if (isAreaSet){
+			console.log("Current area: " + $scope.currentArea);}
+		else {
+			console.log("Current area not set");
+		}
+		$scope.getStatus();
+	};
 		
     // gets the current loadshedding status
     $scope.getStatus = function() {
@@ -63,15 +66,35 @@ app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaSer
         });
         AreaService.getStatus();
     };
+	
+	$scope.updateMessage = function() {
+		if($scope.currentStatus == 0) {
+			$scope.message = "There is no loadshedding at present" + " in area " + $scope.currentArea;
+			$scope.statusStyle = {'background-color':'#BDF4CB'};
+		}
+		else {
+			$scope.message = "Stage " + $scope.currentStatus + " in area " + $scope.currentArea;
+			$scope.statusStyle = {'background-color':'#FFB5B5'};
+		}
+	};
   
     // when loadshedding status is fetched
-    $rootScope.$on(gotStatusEvent, function (event, message) {
-        $scope.currentStatus = message;
-        $ionicLoading.hide();
+    $rootScope.$on(gotStatusEvent, function (event, result) {
+		$ionicLoading.hide();
+		
+		if(result.success) {
+        	$scope.currentStatus = result.status;
+		}
+        else {
+			$scope.message = "Error from server: " + result.message;
+			$scope.statusStyle = {'background-color':'#FFD9B7'};
+		}
+		$scope.updateMessage();
     });
 
     // when the user changes area
     $rootScope.$on(areaChangedEvent, function (event, message) {
         $scope.currentArea = message;
+		$scope.updateMessage();
     });
 });
