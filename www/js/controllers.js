@@ -19,13 +19,8 @@ app.service('AreaService', function($http, $rootScope) {
 
     this.getStatus = function() {
 
-        var req = {
-             method: 'GET',
-             url: 'http://api address goes here',
-             headers: {
-             }
-         };
-        $http(req) // expect { 'data': 1 }
+				// expect { 'data': 1 }
+        $http.get('http://noshedserver-dev.azurewebsites.net/status') 
             .success(function(data, status, headers, config) {
                 console.log("Got status from server: " + JSON.stringify(data));
                 this.currentStatus = data.status;
