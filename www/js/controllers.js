@@ -4,7 +4,7 @@ var areaChangedEvent = 'area-changed';
 var gotStatusEvent = 'got-status';
 
 app.service('AreaService', function($http, $rootScope) {
-    this.currentArea = window.localStorage.getItem("area");
+    this.currentArea = window.localStorage['area'];
 
     this.currentStatus = -1;
 
@@ -14,7 +14,7 @@ app.service('AreaService', function($http, $rootScope) {
         console.log('$broadcast areaChanged to ' + areaId);
         $rootScope.$broadcast(areaChangedEvent, areaId);
         this.currentArea = areaId;
-        window.localStorage.setItem("area", areaId);
+       	window.localStorage["area"] = areaId;
     };
 
     this.getStatus = function() {
@@ -58,8 +58,7 @@ app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaSer
 		
     // gets the current loadshedding status
     $scope.getStatus = function() {
-				window.localStorage.clear();
-        $ionicLoading.show({
+				$ionicLoading.show({
           template: 'Loading...'
         });
         AreaService.getStatus();
