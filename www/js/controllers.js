@@ -21,11 +21,11 @@ app.service('AreaService', function($http, $rootScope) {
 
 		// http://noshedserver-dev.azurewebsites.net/status
 		// expect { 'status': 1 }
-        $http.get('http://localhost:3000/status') 
+        $http.get('/status')
             .success(function(data, status, headers, config) {
                 console.log("Got status from server: " + JSON.stringify(data));
                 this.currentStatus = data.status;
-                $rootScope.$broadcast(gotStatusEvent, {'success': true, 'status': data.status});
+				$rootScope.$broadcast(gotStatusEvent, {'success': true, 'status': data.status});
             }).
             error(function(data, status, headers, config) {
                 $rootScope.$broadcast(gotStatusEvent, {'success': false, 'message': data.error});
@@ -72,7 +72,7 @@ app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaSer
 			$scope.message = "There is no loadshedding at present" + " in area " + $scope.currentArea;
 			$scope.statusStyle = {'background-color':'#BDF4CB'};
 		}
-		else {
+		else if($scope.currentStatus > 0){
 			$scope.message = "Stage " + $scope.currentStatus + " in area " + $scope.currentArea;
 			$scope.statusStyle = {'background-color':'#FFB5B5'};
 		}
@@ -82,10 +82,11 @@ app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaSer
     $rootScope.$on(gotStatusEvent, function (event, result) {
 		$ionicLoading.hide();
 		
-		if(result.success) {
+		if(result.success == true) {
         	$scope.currentStatus = result.status;
 		}
         else {
+			$scope.currentStatus = -1;
 			$scope.message = "Error from server: " + result.message;
 			$scope.statusStyle = {'background-color':'#FFD9B7'};
 		}
