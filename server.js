@@ -9,7 +9,7 @@ var mongoose = require('./config/mongoose');
 var db = mongoose();
 
 // serve static pages in ./www
-app.use('/', express.static('./www'));
+app.use('/', express.static(__dirname + '/www'));
 
 // routes
 var status = require('./routes/status');
