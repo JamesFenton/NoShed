@@ -8,13 +8,10 @@ var app = express();
 var mongoose = require('./config/mongoose');
 var db = mongoose();
 
-// view engine setup
-app.use(express.static('www'));
+// serve static pages in ./www
+app.use(express.static('./www'));
 
 // routes
-var index = require('./routes/index');
-app.use('/', index);
-
 var status = require('./routes/status');
 app.use('/status', status);
 
