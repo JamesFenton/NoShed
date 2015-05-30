@@ -1,7 +1,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var StatusLogSchema = new Schema({
+var RequestLogSchema = new Schema({
     time: Date,
     user: String,
     level: String,
@@ -9,4 +9,4 @@ var StatusLogSchema = new Schema({
     message: String
 });
 
-mongoose.model('StatusLog', StatusLogSchema);
+mongoose.model('RequestLog', RequestLogSchema);

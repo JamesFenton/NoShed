@@ -2,6 +2,7 @@ var express = require('express');
 var http = require('http');
 var router = express.Router();
 var log = require('../helpers/logging');
+var eskomCaller = require('../helpers/eskom.caller');
 
 var timeOfLastUpdate = null;
 var currentStatus = null;
@@ -17,57 +18,32 @@ router.get('/', function (req, res) {
 
 	res.setHeader('Content-Type', 'application/json');
 
-	var sendResponse = function(req, res, status) {
-		console.log('\tSending status: ' + status);
-		res.send({'status': status});
+	// the function for sending a response and logging
+	var sendResponse = function(req, res, loadsheddingStatus, message) {
+		console.log('\tSending load shedding status: ' + loadsheddingStatus);
+		responseCode = loadsheddingStatus >= 0 ? 200 : 500;
+		res.status(responseCode).send({'status': loadsheddingStatus, 'message': message});
 		// logging
 		var clientAddress = req.header('x-forwarded-for') || req.connection.remoteAddress || 'unknown';
-		log(clientAddress, 'debug', status, null);
+		log.logRequest(clientAddress, 'debug', loadsheddingStatus, message);
 	};
 
-	var timeSinceLastUpdate = new Date() - timeOfLastUpdate;
-	console.log("Last update was " + timeSinceLastUpdate/1000 + " seconds ago");
-
-	// update status every 15 seconds
-	var timeBetweenStatusUpdates = 15000; // milliseconds
-	if(timeOfLastUpdate === null || currentStatus === null || timeSinceLastUpdate > timeBetweenStatusUpdates)
-	{
-		// call eskom.co.za
-		var options = {
-			host: 'loadshedding.eskom.co.za',
-			port: 80,
-			path: '/LoadShedding/GetStatus'
-		};
-		http.get(options, function(getRes) {
-			timeOfLastUpdate = new Date();
-			console.log("\tGot response from eskom.co.za: " + getRes.statusCode);
-			// if a successful response from eskom.co.za
-			if(getRes.statusCode === 200) {
-				// send response
-				getRes.on('data', function (chunk) {
-						console.log('\tBODY: ' + chunk);
-						var status = parseInt(chunk) - 1;
-						currentStatus = status;
-						sendResponse(req, res, status);
-				});
-			}
-			else {
-				var message = 'Could not connect to eskom.co.za: ' + getRes.statusCode;
-				res.status(500).send({'error': message});
-				var clientAddress = req.header('x-forwarded-for') || req.connection.remoteAddress || 'unknown';
-				log(clientAddress, 'error', null, message);
-			}
-		// handle errors
-		}).on('error', function(e) {
-			var message = 'Could not connect to eskom.co.za: ' + e.code;
-			res.status(500).send({'error': message});
-			var clientAddress = req.header('x-forwarded-for') || req.connection.remoteAddress || 'unknown';
-			log(clientAddress, 'error', null, message);
-		});
+	// define the callback when the loadshedding status is fetched
+	var gotStatusCallback = function(loadsheddingStatus){
+		// if successful
+		if(loadsheddingStatus >= 0){
+			sendResponse(req, res, loadsheddingStatus);
+		}
+		// if failure
+		else {
+			var message = 'Could not connect to eskom.co.za';
+			sendResponse(req, res, -1, message);
+		}
 	}
-	else {
-		sendResponse(req, res, currentStatus);
-	}
+	
+	// get the load shedding status
+	var loadsheddingStatus = eskomCaller(gotStatusCallback);
+	
 });
 
 module.exports = router;

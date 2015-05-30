@@ -15,4 +15,14 @@ app.use('/', express.static(__dirname + '/www'));
 var status = require('./routes/status');
 app.use('/status', status);
 
+// log status
+var logger = require('./helpers/logging');
+var eskomCaller = require('./helpers/eskom.caller');
+
+var CronJob = require('cron').CronJob;
+new CronJob('* * */1 * * *', function(){
+	console.log("logging scheduled status");
+	eskomCaller(logger.logStatus);
+}).start();
+
 module.exports = app;
