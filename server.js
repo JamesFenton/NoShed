@@ -20,7 +20,7 @@ var logger = require('./helpers/logging');
 var eskomCaller = require('./helpers/eskom.caller');
 
 var CronJob = require('cron').CronJob;
-new CronJob('* * */1 * * *', function(){
+new CronJob('00 00 * * * *', function(){
 	console.log("logging scheduled status");
 	eskomCaller(logger.logStatus);
 }).start();

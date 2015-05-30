@@ -17,8 +17,6 @@ var logRequest = function(user, level, loadshedding, message){
         if (err) { 
             return console.error(err);
         }
-        else {
-        }
     });
 };
 
@@ -29,6 +27,11 @@ var logStatus = function(status){
     	loadshedding: status
 	});
 	console.log("Logging status: " + JSON.stringify(logEntry));
+	logEntry.save(function (err, logEntry) {
+        if (err) { 
+            return console.error(err);
+        }
+    });
 };
 
 module.exports = { 
