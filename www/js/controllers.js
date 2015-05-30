@@ -1,9 +1,9 @@
-var app = angular.module('starter.controllers', ['ionic']);
+var app = angular.module('noshed.controllers', ['ionic', 'noshed.config']);
 
 var areaChangedEvent = 'area-changed';
 var gotStatusEvent = 'got-status';
 
-app.service('AreaService', function($http, $rootScope) {
+app.service('AreaService', function($http, $rootScope, noshedConfig) {
     this.currentArea = window.localStorage['area'];
 
     this.currentStatus = -1;
@@ -21,7 +21,9 @@ app.service('AreaService', function($http, $rootScope) {
 
 		// http://noshedserver-dev.azurewebsites.net/status
 		// expect { 'status': 1 }
-        $http.get('/status')
+		var serverUrl = noshedConfig.serverUrl;
+		console.log('connecting to ' + serverUrl);
+        $http.get(serverUrl + '/status')
             .success(function(data, status, headers, config) {
                 console.log("Got status from server: " + JSON.stringify(data));
                 this.currentStatus = data.status;
