@@ -21,11 +21,13 @@ router.get('/', function (req, res) {
 	// the function for sending a response and logging
 	var sendResponse = function(req, res, loadsheddingStatus, message) {
 		console.log('\tSending load shedding status: ' + loadsheddingStatus);
-		responseCode = loadsheddingStatus >= 0 ? 200 : 500;
+		var responseCode = loadsheddingStatus >= 0 ? 200 : 500;
 		res.status(responseCode).send({'status': loadsheddingStatus, 'message': message});
+		
 		// logging
 		var clientAddress = req.header('x-forwarded-for') || req.connection.remoteAddress || 'unknown';
-		log.logRequest(clientAddress, 'debug', loadsheddingStatus, message);
+		var logLevel = loadsheddingStatus >= 0 ? 'debug' : 'error';
+		log.logRequest(clientAddress, logLevel, loadsheddingStatus, message);
 	};
 
 	// define the callback when the loadshedding status is fetched
