@@ -15,4 +15,7 @@ app.use('/', express.static(__dirname + '/www'));
 var status = require('./routes/status');
 app.use('/status', status);
 
+// periodic logging
+//require('./helpers/periodic.eskom.caller')('00 00 * * * *').start();
+
 module.exports = app;
