@@ -20,21 +20,6 @@ var logRequest = function(user, level, loadshedding, message){
     });
 };
 
-// logs a loadshedding status
-var logStatus = function(status){
-	var logEntry = new StatusLog({
-		time: new Date(),
-    	loadshedding: status
-	});
-	console.log("Logging status: " + JSON.stringify(logEntry));
-	logEntry.save(function (err, logEntry) {
-        if (err) { 
-            return console.error(err);
-        }
-    });
-};
-
 module.exports = { 
-	logRequest: logRequest, 
-	logStatus: logStatus
+	logRequest: logRequest
 };
