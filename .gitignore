@@ -29,3 +29,6 @@ node_modules/
 platforms/
 plugins/
 
+# brackets
+.brackets.json
+
