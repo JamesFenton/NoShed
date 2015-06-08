@@ -1,4 +1,4 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'local';
+process.env.NODE_ENV = process.env.NOSHED_ENV || 'local';
 console.log("Running in env " + process.env.NODE_ENV);
 
 // setup express
