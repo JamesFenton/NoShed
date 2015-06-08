@@ -1,4 +1,4 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
+process.env.NODE_ENV = process.env.NODE_ENV || 'local';
 console.log("Running in env " + process.env.NODE_ENV);
 
 // setup express
@@ -14,8 +14,5 @@ app.use('/', express.static(__dirname + '/www'));
 // routes
 var status = require('./routes/status');
 app.use('/status', status);
-
-// periodic logging
-//require('./helpers/periodic.eskom.caller')('00 00 * * * *').start();
 
 module.exports = app;
