@@ -1,7 +1,6 @@
 var mongoose = require('../config/mongoose');
 
 var RequestLog = require('mongoose').model('RequestLog');
-var StatusLog = require('mongoose').model('StatusLog');
 
 // logs a request to the website
 var logRequest = function(user, level, loadshedding, message){
