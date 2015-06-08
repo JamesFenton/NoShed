@@ -2,6 +2,7 @@ var config = require('./config'),
     mongoose = require('mongoose');
 
 module.exports = function() {
+    require('../models/area.model.js');
     require('../models/request.model.js');
     
     console.log("Connecting to db at " + config.db);
