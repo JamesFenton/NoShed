@@ -12,7 +12,10 @@ router.get('/', function(req, res) {
 
 // route for /data/history
 router.get('/history', function(req, res){
-	StatusLog.find({}, function(err, logs) {
+	StatusLog.find({}) 
+			 .sort('-time')
+		     .limit(100)
+			 .exec(function(err, logs){
 		if (err) {
 			res.send("Error")
 		} else {
