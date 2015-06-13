@@ -32,3 +32,5 @@ plugins/
 # brackets
 .brackets.json
 
+# VS Code
+.settings*
