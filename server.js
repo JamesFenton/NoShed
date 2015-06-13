@@ -1,22 +1,14 @@
-process.env.NODE_ENV = process.env.NOSHED_ENV || 'local';
-console.log("Running in env " + process.env.NODE_ENV);
+var app = require('./app');
+var http = require('http');
 
-// setup express
-var express = require('express');
-var app = express();
-// setup DB
-var mongoose = require('./config/mongoose');
-var db = mongoose();
+var port = process.env.PORT || '3000';
+app.set('port', port);
 
-// serve static pages in ./www
-app.use('/', express.static(__dirname + '/www'));
+var server = http.createServer(app);
+server.listen(port);
 
-// serve /data
-var data = require('./routes/data');
-app.use('/data', data);
-
-// routes
-var status = require('./routes/status');
-app.use('/status', status);
-
-module.exports = app;
+var addr = server.address();
+var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+console.log("Server running at " + bind);
