@@ -14,6 +14,7 @@ var callEskom = function(callback){
 			getRes.on('data', function (chunk) {
 				var status = parseInt(chunk) - 1;
 				console.log("\tGot response from eskom.co.za: " + status);
+				status = Math.max(0, status);
 				callback(status);
 			});
 		}
