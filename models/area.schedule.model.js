@@ -1,7 +1,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var AreaScheduleSchema = new Schema({
+var areaScheduleSchema = new Schema({
     day: Number,
 	stage: Number,
     area: Number,
@@ -9,4 +9,4 @@ var AreaScheduleSchema = new Schema({
     endTime: Date
 });
 
-mongoose.model('AreaSchedule', AreaScheduleSchema);
+mongoose.model('AreaSchedule', areaScheduleSchema);
