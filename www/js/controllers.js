@@ -124,7 +124,7 @@ app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaSer
 		$ionicLoading.hide();
 		
 		if(result.success == true) {
-        	$scope.stage = 2;//result.status;
+        	$scope.stage = result.status;
 		}
         else {
 			$scope.currentStatus = -1;
