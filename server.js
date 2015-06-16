@@ -15,4 +15,10 @@ app.use('/', express.static(__dirname + '/www'));
 var status = require('./routes/status');
 app.use('/status', status);
 
+var areas = require('./routes/areas');
+app.use('/areas', areas);
+
+var schedule = require('./routes/schedule');
+app.use('/schedule', schedule);
+
 module.exports = app;
