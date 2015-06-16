@@ -1,9 +1,17 @@
 <ion-view view-title="Status" ng-init="init()">
   <ion-content>
-    <ion-item class="text-center" ng-bind="message" ng-style="statusStyle">
+    <!-- Stage -->
+    <ion-item class="text-center" ng-bind="message" ng-style="statusStyle"></ion-item>
+    <ion-item class="button button-block button-stable" ng-click="getStage()">
+      Update Status
     </ion-item>
-    <ion-item class="button button-block button-stable" ng-click="getStatus()">
-      Get Status
+    
+    <!-- Schedule -->
+    <ion-item class="text-center">
+      Schedule for day {{day}} for stage {{stage}} for area {{currentArea}}:
     </ion-item>
+    <ion-list ng-repeat="time in schedule">
+        <ion-item class="text-center">{{time.startTime}} - {{time.endTime}}</ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>

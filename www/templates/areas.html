@@ -1,4 +1,4 @@
-<ion-view view-title="Change Area">
+<ion-view view-title="Change Area" ng-init="getAreas()">
   <ion-content>
     <ion-list>
       <ion-item ng-repeat="area in allAreas" ng-click="changeArea(area)" href="#/app/status">
