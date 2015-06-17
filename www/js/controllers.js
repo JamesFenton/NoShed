@@ -1,7 +1,7 @@
 var app = angular.module('noshed.controllers', ['ionic', 'noshed.config']);
 
 var areaChangedEvent = 'area-changed';
-var gotAreas = 'got-areas';
+var gotAreasEvent = 'got-areas';
 var gotStageEvent = 'got-status';
 var gotScheduleEvent = 'got-schedule';
 
@@ -40,10 +40,10 @@ app.service('AreaService', function($http, $rootScope, noshedConfig) {
         $http.get(url)
             .success(function(data, status, headers, config) {
                 this.allAreas = data;
-				$rootScope.$broadcast(gotAreas, data);
+				$rootScope.$broadcast(gotAreasEvent, data);
             }).
             error(function(data, status, headers, config) {
-                $rootScope.$broadcast(gotAreas, data);
+                $rootScope.$broadcast(gotAreasEvent, data);
             });
     };
     
@@ -76,7 +76,7 @@ app.controller('AreaCtrl', function($rootScope, $scope, AreaService){
         AreaService.setArea(area);
     };
     
-    $rootScope.$on(gotAreas, function (event, result) {
+    $rootScope.$on(gotAreasEvent, function (event, result) {
         $scope.allAreas = result;
     });
 });
@@ -169,4 +169,4 @@ var formatDateString = function(str){
     if(mins.toString().length == 1)
         mins += "0";
     return hours + ":" + mins;
-}
+};
