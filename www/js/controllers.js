@@ -58,7 +58,7 @@ app.service('AreaService', function($http, $rootScope, noshedConfig) {
 				$rootScope.$broadcast(gotScheduleEvent, data);
             }).
             error(function(data, status, headers, config) {
-                $rootScope.$broadcast(gotScheduleEvent, data);
+                $rootScope.$broadcast(gotScheduleEvent, []);
             });
     };
 });

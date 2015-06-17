@@ -5,13 +5,13 @@ path = require('path');
 var mongoose = require('../config/mongoose');
 var StatusLog = require('mongoose').model('StatusLog');
 
-// route for /data
+// route for /history
 router.get('/', function(req, res) {
-    res.sendFile(path.resolve(__dirname + '/../www/data.html'));
+    res.sendFile(path.resolve(__dirname + '/../www/history.html'));
 });
 
-// route for /data/history
-router.get('/history', function(req, res){
+// route for /history/data
+router.get('/data', function(req, res){
 	StatusLog.find({}) 
 			 .sort('-time')
 		     .limit(100)

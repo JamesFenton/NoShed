@@ -11,12 +11,18 @@ var db = mongoose();
 // serve static pages in ./www
 app.use('/', express.static(__dirname + '/www'));
 
-// serve /data
-var data = require('./routes/data');
-app.use('/data', data);
+// serve /history
+var history = require('./routes/history');
+app.use('/history', history);
 
 // routes
 var status = require('./routes/status');
 app.use('/status', status);
+
+var areas = require('./routes/areas');
+app.use('/areas', areas);
+
+var schedule = require('./routes/schedule');
+app.use('/schedule', schedule);
 
 module.exports = app;
