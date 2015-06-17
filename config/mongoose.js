@@ -2,6 +2,8 @@ var config = require('./config'),
     mongoose = require('mongoose');
 
 module.exports = function() {
+    require('../models/area.model.js');
+    require('../models/area.schedule.model.js');
     require('../models/request.model.js');
 	require('../models/status.model.js');
     
