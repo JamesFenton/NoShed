@@ -106,7 +106,7 @@ app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaSer
 			$scope.statusStyle = {'background-color':'#BDF4CB'};
 		}
 		else if($scope.stage > 0){
-			$scope.message = "Stage " + $scope.currentStatus + " in area " + $scope.currentArea;
+			$scope.message = "Stage " + $scope.stage + " in area " + $scope.currentArea;
 			$scope.statusStyle = {'background-color':'#FFB5B5'};
 		}
 	};
@@ -127,7 +127,7 @@ app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaSer
         	$scope.stage = result.status;
 		}
         else {
-			$scope.currentStatus = -1;
+			$scope.stage = -1;
 			$scope.message = "Error from server: " + result.message;
 			$scope.statusStyle = {'background-color':'#FFD9B7'};
 		}
