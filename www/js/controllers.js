@@ -63,11 +63,14 @@ app.service('AreaService', function($http, $rootScope, noshedConfig) {
     };
 });
 
-app.controller('AreaCtrl', function($rootScope, $scope, AreaService){
+app.controller('AreaCtrl', function($rootScope, $scope, AreaService, $ionicLoading){
     
     $scope.allAreas = [];
     
     $scope.getAreas = function() {
+		$ionicLoading.show({
+			template: 'Loading Areas'
+        });
         console.log('getting areas from AreaCtrl');
         AreaService.getAreas();
     };
@@ -78,10 +81,11 @@ app.controller('AreaCtrl', function($rootScope, $scope, AreaService){
     
     $rootScope.$on(gotAreasEvent, function (event, result) {
         $scope.allAreas = result;
+		$ionicLoading.hide();
     });
 });
 
-app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaService) {
+app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaService, $interval, $location) {
     
     $scope.day = AreaService.day;
     $scope.stage = AreaService.stage;
@@ -89,15 +93,18 @@ app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaSer
 	$scope.message = "";
 	$scope.statusStyle = {};
     $scope.schedule = [];
+	var gotStage = false; // used once when a stage has been fetched, start fetching periodically
 		
 	$scope.init = function() {
-		var isAreaSet = $scope.currentArea !== null;
+		var isAreaSet = typeof $scope.currentArea !== 'undefined';
 		if (isAreaSet){
-			console.log("Current area: " + $scope.currentArea);}
+			console.log("Current area: " + $scope.currentArea);
+			$scope.getStage();
+		}
 		else {
 			console.log("Current area not set");
+			$location.path("app/areas");
 		}
-		$scope.getStage();
 	};
 	
 	$scope.updateMessage = function() {
@@ -110,11 +117,11 @@ app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaSer
 			$scope.statusStyle = {'background-color':'#FFB5B5'};
 		}
 	};
-		
+	
     // gets the current loadshedding status
     $scope.getStage = function() {
 				$ionicLoading.show({
-          template: 'Loading...'
+          template: 'Getting status'
         });
         AreaService.getStage();
     };
@@ -125,6 +132,10 @@ app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaSer
 		
 		if(result.success == true) {
         	$scope.stage = result.status;
+			if(!gotStage){
+				gotStage = true;
+				$interval($scope.getStage, 60000)
+			}
 		}
         else {
 			$scope.stage = -1;
@@ -133,12 +144,13 @@ app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaSer
 		}
 		$scope.updateMessage();
         $scope.getSchedule($scope.day, $scope.stage, $scope.currentArea);
+		
     });
     
-    // gets the current loadshedding status
+    // gets the current loadshedding schedule
     $scope.getSchedule = function(day, stage, area) {
 				$ionicLoading.show({
-          template: 'Loading...'
+          template: 'Getting schedule'
         });
         AreaService.getSchedule(day, stage, area);
     };
@@ -156,6 +168,7 @@ app.controller('StatusCtrl', function($rootScope, $scope, $ionicLoading, AreaSer
 
     // when the user changes area
     $rootScope.$on(areaChangedEvent, function (event, message) {
+		$scope.getStage();
         $scope.currentArea = message;
 		$scope.updateMessage();
         $scope.getSchedule($scope.day, $scope.stage, $scope.currentArea);
