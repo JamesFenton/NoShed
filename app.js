@@ -25,4 +25,7 @@ app.use('/areas', areas);
 var schedule = require('./routes/schedule');
 app.use('/schedule', schedule);
 
+var env = require('./routes/env');
+app.use('/env', env);
+
 module.exports = app;
